@@ -1,0 +1,70 @@
+{% extends 'master.html' %}
+
+{% block content %}
+<div class="container" style="margin-top: 50px;">
+<div class="row">
+<center>
+<div class="card" style="padding: 2px">
+  <div class="card-body" style="border:2px solid; background-color: #FCFDE0;">
+    <div class="card-text">
+  <h2>User Detail Form</h2>
+
+  <form method="post" id="userDetailForm" data-cities-url="{% url 'ajax_load_cities' %}"data-states-url="{% url 'ajax_load_states' %}"data-districts-url="{% url 'ajax_load_districts' %}" novalidate>
+    {% csrf_token %}
+    <table style="border : 5px " class="table-hover table-striped">
+      {{ form.as_table }}
+    </table>
+    <button type="submit" class="btn btn-success" style="padding: 5px; margin: 10px">Save</button>
+    <a href="{% url 'detail' %}" class="btn btn-info" style="padding: 5px; margin: 10px">All Details</a>
+  </form>
+  </div>
+  </div>
+  </div>
+</center>
+</div>
+</div>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script>
+    $("#id_country").change(function () {
+      var url = $("#userDetailForm").attr("data-states-url");
+      var countryId = $(this).val();
+      $.ajax({
+        url: url,
+        data: {
+          'country': countryId
+        },
+        success: function (data) {
+          $("#id_state").html(data);
+        }
+      });
+    });
+    $("#id_state").change(function () {
+      var url = $("#userDetailForm").attr("data-districts-url");
+      var stateId = $(this).val();
+      $.ajax({
+        url: url,
+        data: {
+          'state': stateId
+        },
+        success: function (data) {
+          $("#id_district").html(data);
+        }
+      });
+    });
+    $("#id_district").change(function () {
+      var url = $("#userDetailForm").attr("data-cities-url");
+      var districtId = $(this).val();
+      $.ajax({
+        url: url,
+        data: {
+          'district': districtId
+        },
+        success: function (data) {
+          $("#id_city").html(data);
+        }
+      });
+    });
+  </script>
+
+{% endblock %}
