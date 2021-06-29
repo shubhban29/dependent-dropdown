@@ -1,5 +1,5 @@
 from django import forms
-from .models import UserDetails, State, District, City
+from .models import UserDetails, State, District, City, Country
 
 class UserDetailsForm(forms.ModelForm):
     class Meta:
@@ -7,6 +7,7 @@ class UserDetailsForm(forms.ModelForm):
         fields = ('name','country','state','district','city')
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['country'].queryset = Country.objects.all().order_by('name')
         self.fields['state'].queryset = State.objects.none()
         self.fields['district'].queryset = District.objects.none()
         self.fields['city'].queryset = City.objects.none()
